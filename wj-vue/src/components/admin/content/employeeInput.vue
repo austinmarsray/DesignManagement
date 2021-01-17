@@ -3,7 +3,7 @@
       <el-form :model="loginForm" :rules="rules" label-position="left"
                label-width="90px">
         <el-form-item prop="employeeNo" label="员工编号">
-        <el-input type="text" v-model="loginForm.clientNo"
+        <el-input type="text" v-model="loginForm.employeeNo"
                     auto-complete="off" placeholder="员工编号"></el-input>
         </el-form-item>
 
@@ -50,7 +50,7 @@
         </el-form-item>
 
         <el-form-item prop="position" label="职位">
-          <el-input type="text" v-model="loginForm.clientName"
+          <el-input type="text" v-model="loginForm.position"
                     auto-complete="off" placeholder="职位"></el-input>
         </el-form-item>
 
@@ -90,18 +90,18 @@
             phone: [{required: true, message: '联系电话不能为空', trigger: 'blur'}]
           },
           loginForm: {
-            employeeNo: '',
-            employeeName: '',
-            gender: '',
-            birthday: '',
-            entry: '',
-            team: '',
-            phone: '',
-            telphone: '',
-            email: '',
-            ID: '',
-            political: '',
-            position: ''
+            employeeNo: 'E00031',
+            employeeName: '刘明',
+            gender: '男',
+            birthday: '1999-12-30',
+            entry: '2018-1-1',
+            team: '建模团队',
+            phone: '12163542465',
+            telphone: '14165465',
+            email: 'liuming@foxmail.com',
+            ID: '5320151211315121351',
+            political: '群众',
+            position: 1
           }
         }
       },
@@ -124,7 +124,7 @@
         },
         register () {
           this.$axios
-            .post('', { //添加路径
+            .post('/employee/add', { //添加路径
                 employeeNo: this.loginForm.employeeNo,
                 employeeName: this.loginForm.employeeName,
                 gender: this.loginForm.gender,
@@ -134,9 +134,10 @@
                 phone: this.loginForm.phone,
                 telphone: this.loginForm.telphone,
                 email: this.loginForm.email,
-                ID: this.loginForm.ID,
+                id: this.loginForm.ID,
                 political: this.loginForm.political,
-                position: this.loginForm.position
+                position: this.loginForm.position,
+                pwd: '123'
             })
             .then(resp => {
               if (resp.data.code === 200) {

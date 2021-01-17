@@ -63,13 +63,13 @@
             clientName: [{required: true, message: '客户名不能为空', trigger: 'blur'}]
           },
           loginForm: {
-            clientNo: '',
-            clientName: '',
-            phone: '',
-            telphone: '',
-            QQ: '',
-            email: '',
-            Funit: '',
+            clientNo: 'C00031',
+            clientName: '王格比',
+            phone: '12978564651',
+            telphone: '2348975873',
+            QQ: '1278165781',
+            email: 'green@qq.com',
+            Funit: '网图科技有限责任公司',
             Sunit: '',
             Tunit: ''
           }
@@ -91,16 +91,16 @@
         },
         register () {
           this.$axios
-            .post('', { //添加路径
+            .post('/client/add', { //添加路径
                 clientNo: this.loginForm.clientNo,
                 clientName: this.loginForm.clientName,
                 phone: this.loginForm.phone,
                 telphone: this.loginForm.telphone,
-                QQ: this.loginForm.QQ,
+                qq: this.loginForm.QQ,
                 email: this.loginForm.email,
-                Funit: this.loginForm.Funit,
-                Sunit: this.loginForm.Sunit,
-                Tunit: this.loginForm.Tunit
+                funit: this.loginForm.Funit,
+                sunit: this.loginForm.Sunit,
+                tunit: this.loginForm.Tunit
             })
             .then(resp => {
               if (resp.data.code === 200) {

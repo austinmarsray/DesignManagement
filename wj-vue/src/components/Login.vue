@@ -38,12 +38,13 @@
     },
     methods: {
       login () {
-        console.log("click");
         var _this = this
         this.$axios
           .post('/login', {
-            username: this.loginForm.username,
-            password: this.loginForm.password
+            // username: this.loginForm.username,
+            // password: this.loginForm.password
+            employeeNo: this.loginForm.username,
+            pwd: this.loginForm.password
           })
           .then(resp => {
             if (resp.data.code === 200) {

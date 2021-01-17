@@ -128,7 +128,7 @@ Vue.prototype.$notify = Notification
 Vue.prototype.$message = Message
 
 var axios = require('axios')
-axios.defaults.baseURL = 'http://192.168.43.113:8443/api'
+axios.defaults.baseURL = 'http://localhost:8443/api'
 // 使请求带上凭证信息
 axios.defaults.withCredentials = true
 
@@ -145,52 +145,92 @@ router.beforeEach((to, from, next) => {
         name: 'Dashboard'
       })
     }
-    // 如果前端没有登录信息则直接拦截，如果有则判断后端是否正常登录（防止构造参数绕过）
-    if (to.meta.requireAuth) {
-      if (store.state.username) {
-        axios.get('/authentication').then(resp => {
-          if (resp) {
-            next()
-          }
-        })
-      } else {
-        next({
-          path: 'login',
-          query: {redirect: to.fullPath}
-        })
-      }
-    } else {
-      next()
-    }
+
+    console.log("路由检查")
+    next()
+    // // 如果前端没有登录信息则直接拦截，如果有则判断后端是否正常登录（防止构造参数绕过）
+    // if (to.meta.requireAuth) {
+    //   console.log(store.state.username);
+    //   if (store.state.username) {
+    //     console.log("路由检查")
+    //     next()
+    //     // axios.get('/authentication').then(resp => {
+    //     //   if (resp) {
+    //     //     next()
+    //     //   }
+    //     // })
+    //   } else {
+    //     next({
+    //       path: 'login',
+    //       query: {redirect: to.fullPath}
+    //     })
+    //   }
+    // } 
+    // console.log("judge");
+    // next() 
   }
 )
 
 // http response 拦截器
-axios.interceptors.response.use(
-  response => {
-    return response
-  },
-  error => {
-    if (error) {
-      store.commit('logout')
-      router.replace('/login')
-    }
-    // 返回接口返回的错误信息
-    return Promise.reject(error)
-  })
+// axios.interceptors.response.use(
+//   response => {
+//     return response
+//   },
+//   error => {
+//     if (error) {
+//       console.log("here")
+//       store.commit('logout')
+//       router.replace('/login')
+//     }
+//     // 返回接口返回的错误信息
+//     return Promise.reject(error)
+//   })
 
 const initAdminMenu = (router, store) => {
   // 防止重复触发加载菜单操作
   if (store.state.adminMenus.length > 0) {
     return
   }
-  axios.get('/menu').then(resp => {
-    if (resp && resp.status === 200) {
-      var fmtRoutes = formatRoutes(resp.data.result)
-      router.addRoutes(fmtRoutes)
-      store.commit('initAdminMenu', fmtRoutes)
-    }
-  })
+  // axios.get('/menu').then(resp => {
+  //   if (resp && resp.status === 200) {
+  //     var fmtRoutes = formatRoutes(resp.data.result)
+  //     router.addRoutes(fmtRoutes)
+  //     store.commit('initAdminMenu', fmtRoutes)
+  //   }
+  // })
+  let menus = []
+  if(store.state.position == 1){
+    menus = [{"id":1,"path":"/admin","name":null,"nameZh":"员工信息管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":2,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"content/employeeInput","parentId":3,"children":[]},
+                {"id":3,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息编辑","iconCls":"el-icon-user","component":"content/employeeManage","parentId":3,"children":[]}
+              ]},
+              {"id":4,"path":"/admin","name":null,"nameZh":"客户信息管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":5,"path":"/admin/content/clientInput","name":"clientInput","nameZh":"客户信息录入","iconCls":"el-icon-user","component":"content/clientInput","parentId":3,"children":[]},
+                {"id":6,"path":"/admin/content/clientManage","name":"clientManage","nameZh":"客户信息编辑","iconCls":"el-icon-user","component":"content/clientManage","parentId":3,"children":[]}
+              ]},
+            ]
+  }
+  if(store.state.position == 2){
+    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"/content/employeeInput","parentId":0,"children":[]},
+            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"/content/employeeManage","parentId":0,"children":[]}
+            ]
+  }
+  if(store.state.position == 3){
+    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"/content/employeeInput","parentId":0,"children":[]},
+            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"/content/employeeManage","parentId":0,"children":[]}
+            ]
+  }
+  if(store.state.position == 4){
+    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"employeeInput","parentId":0,"children":[]},
+            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"employeeManage","parentId":0,"children":[]}
+            ]
+  }
+  var fmtRoutes = formatRoutes(menus)
+  router.addRoutes(fmtRoutes)
+  store.commit('initAdminMenu', fmtRoutes)
+  store.commit('initAdminMenu',menus)
 }
 
 const formatRoutes = (routes) => {
@@ -199,7 +239,7 @@ const formatRoutes = (routes) => {
     if (route.children) {
       route.children = formatRoutes(route.children)
     }
-
+    console.log(route.component)
     let fmtRoute = {
       path: route.path,
       component: resolve => {
@@ -213,6 +253,7 @@ const formatRoutes = (routes) => {
       },
       children: route.children
     }
+    console.log(fmtRoute)
     fmtRoutes.push(fmtRoute)
   })
   return fmtRoutes

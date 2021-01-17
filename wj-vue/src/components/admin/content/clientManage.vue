@@ -24,7 +24,7 @@
         </el-form-item>
 
         <el-form-item prop="QQ" label-width="120px" label="QQ">
-          <el-input type="text" v-model="selectedUser.QQ"
+          <el-input type="text" v-model="selectedUser.qq"
                     auto-complete="off" placeholder="QQ"></el-input>
         </el-form-item>
 
@@ -34,16 +34,16 @@
         </el-form-item>
 
         <el-form-item prop="Funit" label-width="120px" label="一级单位">
-          <el-input type="text" v-model="selectedUser.Funit"
+          <el-input type="text" v-model="selectedUser.funit"
                     auto-complete="off" placeholder="一级单位"></el-input>
         </el-form-item>
 
         <el-form-item prop="Sunit" label-width="120px" label="二级单位">
-          <el-input type="text" v-model="selectedUser.Sunit"
+          <el-input type="text" v-model="selectedUser.sunit"
                     auto-complete="off" placeholder="二级单位"></el-input>
         </el-form-item>
         <el-form-item prop="Tunit" label-width="120px" label="三级单位">
-          <el-input type="text" v-model="selectedUser.Tunit"
+          <el-input type="text" v-model="selectedUser.tunit"
                     auto-complete="off" placeholder="三级单位"></el-input>
         </el-form-item>
 
@@ -86,6 +86,11 @@
           fit>
         </el-table-column>
         <el-table-column
+          prop="funit"
+          label="单位"
+          fit>
+        </el-table-column>
+        <el-table-column
           prop="phone"
           label="手机号"
           fit>
@@ -107,6 +112,7 @@
               编辑
             </el-button>
             <el-button
+              @click="delUser(scope.row)"
               type="text"
               size="small">
               移除
@@ -136,7 +142,6 @@
       },
       mounted () {
         this.listUsers()
-        this.listRoles()
       },
       computed: {
         tableHeight () {
@@ -146,83 +151,57 @@
       methods: {
         listUsers () {
           var _this = this
-          this.$axios.get('/admin/user').then(resp => {
+          this.$axios.get('/client/getList').then(resp => {
             if (resp && resp.data.code === 200) {
               _this.users = resp.data.result
             }
           })
         },
-        listRoles () {
-          var _this = this
-          this.$axios.get('/admin/role').then(resp => {
-            if (resp && resp.data.code === 200) {
-              _this.roles = resp.data.result
-            }
-          })
-        },
-        commitStatusChange (value, user) {
-          if (user.username !== 'admin') {
-            this.$axios.put('/admin/user/status', {
-              enabled: value,
-              username: user.username
-            }).then(resp => {
-              if (resp && resp.data.code === 200) {
-                if (value) {
-                  this.$message('用户 [' + user.username + '] 已启用')
-                } else {
-                  this.$message('用户 [' + user.username + '] 已禁用')
-                }
+        onSubmit (user) {
+          this.$axios
+            .post('/client/update', { //添加路径
+                clientNo: user.clientNo,
+                clientName: user.clientName,
+                phone: user.phone,
+                telphone: user.telphone,
+                qq: user.qq,
+                email: user.email,
+                funit: user.funit,
+                sunit: user.sunit,
+                tunit: user.tunit
+            })
+            .then(resp => {
+              if (resp.data.code === 200) {
+                this.$alert('添加成功', '提示', {
+                  confirmButtonText: '确定'
+                })
+                this.clear()
+                this.$emit('onSubmit')
+              } else {
+                this.$alert(resp.data.message, '提示', {
+                  confirmButtonText: '确定'
+                })
               }
             })
-          } else {
-            user.enabled = true
-            this.$alert('不能禁用管理员账户')
-          }
-        },
-        onSubmit (user) {
-          let _this = this
-          // 根据视图绑定的角色 id 向后端传送角色信息
-          let roles = []
-          for (let i = 0; i < _this.selectedRolesIds.length; i++) {
-            for (let j = 0; j < _this.roles.length; j++) {
-              if (_this.selectedRolesIds[i] === _this.roles[j].id) {
-                roles.push(_this.roles[j])
-              }
-            }
-          }
-          this.$axios.put('/admin/user', {
-            username: user.username,
-            name: user.name,
-            phone: user.phone,
-            email: user.email,
-            roles: roles
-          }).then(resp => {
-            if (resp && resp.data.code === 200) {
-              this.$alert('用户信息修改成功')
-              this.dialogFormVisible = false
-              // 修改角色后重新请求用户信息，实现视图更新
-              this.listUsers()
-            } else {
-              this.$alert(resp.data.message)
-            }
-          })
+            .catch(failResponse => {})
+            this.dialogFormVisible = false
         },
         editUser (user) {
           this.dialogFormVisible = true
           this.selectedUser = user
-          let roleIds = []
-          for (let i = 0; i < user.roles.length; i++) {
-            roleIds.push(user.roles[i].id)
-          }
-          this.selectedRolesIds = roleIds
         },
-        resetPassword (username) {
-          this.$axios.put('/admin/user/password', {
-            username: username
+        delUser (user) {
+          this.selectedUser = user
+          let roleIds = this.selectedUser.clientNo
+          this.$axios.post('/client/delete', {
+            clientNo: roleIds,
           }).then(resp => {
             if (resp && resp.data.code === 200) {
-              this.$alert('密码已重置为 123')
-          }
+              this.$alert(resp.data.message)
+              this.listUsers()
+            } else {
+              this.$alert(resp.data.message)
+            }
           })
         }
       }

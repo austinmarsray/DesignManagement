@@ -13,16 +13,21 @@
     name: 'Header',
     methods: {
       logout () {
-        var _this = this
-        this.$axios.get('/logout').then(resp => {
-          if (resp && resp.data.code === 200) {
-            _this.$store.commit('logout')
-            _this.$router.replace('/index')
-            // 清空路由，防止路由重复加载
-            const newRouter = createRouter()
-            _this.$router.matcher = newRouter.matcher
-          }
-        }).catch(failResponse => {})
+        // var _this = this
+        // this.$axios.get('/logout').then(resp => {
+        //   if (resp && resp.data.code === 200) {
+        //     _this.$store.commit('logout')
+        //     _this.$router.replace('/index')
+        //     // 清空路由，防止路由重复加载
+        //     const newRouter = createRouter()
+        //     _this.$router.matcher = newRouter.matcher
+        //   }
+        // }).catch(failResponse => {})
+        this.$store.commit('logout')
+        this.$router.replace('/index')
+        // 清空路由，防止路由重复加载
+        const newRouter = createRouter()
+        this.$router.matcher = newRouter.matcher
       }
     }
   }
