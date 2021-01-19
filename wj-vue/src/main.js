@@ -199,7 +199,7 @@ const initAdminMenu = (router, store) => {
   //   }
   // })
   let menus = []
-  if(store.state.position == 1){
+  if(store.state.position == 0){
     menus = [{"id":1,"path":"/admin","name":null,"nameZh":"员工信息管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
               [
                 {"id":2,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"content/employeeInput","parentId":3,"children":[]},
@@ -212,19 +212,55 @@ const initAdminMenu = (router, store) => {
               ]},
             ]
   }
+  if(store.state.position == 1){
+    menus = [{"id":1,"path":"/admin","name":null,"nameZh":"项目","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":2,"path":"/admin/content/ProManage","name":"ProManage","nameZh":"项目列表","iconCls":"el-icon-user","component":"content/ProManage","parentId":3,"children":[]},
+                {"id":3,"path":"/admin/content/ProFileUpdate","name":"ProFileUpdate","nameZh":"项目文件上传","iconCls":"el-icon-user","component":"content/ProFileUpdate","parentId":3,"children":[]},
+                {"id":7,"path":"/admin/content/ProProgress","name":"ProProgress","nameZh":"项目进度","iconCls":"el-icon-user","component":"content/ProProgress","parentId":3,"children":[]},
+
+              ]},
+              {"id":4,"path":"/admin","name":null,"nameZh":"个人信息管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":5,"path":"/admin/content/PersonInfo","name":"PersonInfo","nameZh":"个人基本信息","iconCls":"el-icon-user","component":"content/PersonInfo","parentId":3,"children":[]},
+                {"id":6,"path":"/admin/content/PersonSalary","name":"PersonSalary","nameZh":"个人工资信息","iconCls":"el-icon-user","component":"content/PersonSalary","parentId":3,"children":[]},
+                {"id":8,"path":"/admin/content/","name":"PersonJugde","nameZh":"个人考核信息","iconCls":"el-icon-user","component":"content/PersonJugde","parentId":3,"children":[]},
+              ]},
+            ]
+  }
   if(store.state.position == 2){
-    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"/content/employeeInput","parentId":0,"children":[]},
-            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"/content/employeeManage","parentId":0,"children":[]}
+    console.log("主管")
+    menus = [{"id":1,"path":"/admin","name":null,"nameZh":"项目","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":9,"path":"/admin/content/ProInput","name":"ProInput","nameZh":"创建项目","iconCls":"el-icon-user","component":"content/ProInput","parentId":3,"children":[]},
+                {"id":2,"path":"/admin/content/ProManage","name":"ProManage","nameZh":"项目列表","iconCls":"el-icon-user","component":"content/ProManage","parentId":3,"children":[]},
+                {"id":3,"path":"/admin/content/ProFileUpdate","name":"ProFileUpdate","nameZh":"项目文件上传","iconCls":"el-icon-user","component":"content/ProFileUpdate","parentId":3,"children":[]},
+                {"id":7,"path":"/admin/content/ProProgress","name":"ProProgress","nameZh":"项目进度","iconCls":"el-icon-user","component":"content/ProProgress","parentId":3,"children":[]}
+              ]},
+              {"id":4,"path":"/admin","name":null,"nameZh":"个人信息管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":5,"path":"/admin/content/PersonInfo","name":"PersonInfo","nameZh":"个人基本信息","iconCls":"el-icon-user","component":"content/PersonInfo","parentId":3,"children":[]},
+                {"id":6,"path":"/admin/content/PersonSalary","name":"PersonSalary","nameZh":"个人工资信息","iconCls":"el-icon-user","component":"content/PersonSalary","parentId":3,"children":[]},
+                {"id":8,"path":"/admin/content/","name":"PersonJugde","nameZh":"个人考核信息","iconCls":"el-icon-user","component":"content/PersonJugde","parentId":3,"children":[]}
+              ]}
             ]
   }
   if(store.state.position == 3){
-    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"/content/employeeInput","parentId":0,"children":[]},
-            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"/content/employeeManage","parentId":0,"children":[]}
-            ]
-  }
-  if(store.state.position == 4){
-    menus = [{"id":1,"path":"/admin/content/employeeInput","name":"employeeInput","nameZh":"员工信息录入","iconCls":"el-icon-user","component":"employeeInput","parentId":0,"children":[]},
-            {"id":2,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息管理","iconCls":"el-icon-user","component":"employeeManage","parentId":0,"children":[]}
+    menus = [{"id":1,"path":"/admin","name":null,"nameZh":"项目管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":2,"path":"/admin/content/ProManage","name":"ProManage","nameZh":"项目列表","iconCls":"el-icon-user","component":"content/ProManage","parentId":3,"children":[]},
+                {"id":7,"path":"/admin/content/ProProgress","name":"ProProgress","nameZh":"项目进度","iconCls":"el-icon-user","component":"content/ProProgress","parentId":3,"children":[]}
+              ]},
+            {"id":4,"path":"/admin","name":null,"nameZh":"员工管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":5,"path":"/admin/content/employeeManage","name":"employeeManage","nameZh":"员工信息","iconCls":"el-icon-user","component":"content/employeeManage","parentId":3,"children":[]},
+                {"id":6,"path":"/admin/content/SalaryManage","name":"SalaryManage","nameZh":"工资信息","iconCls":"el-icon-user","component":"content/SalaryManage","parentId":3,"children":[]},
+                {"id":8,"path":"/admin/content/JudgeManage","name":"JudgeManage","nameZh":"考核信息","iconCls":"el-icon-user","component":"content/JudgeManage","parentId":3,"children":[]}
+              ]},
+            {"id":1,"path":"/admin","name":null,"nameZh":"客户管理","iconCls":"el-icon-user","component":"AdminIndex","parentId":0,"children":
+              [
+                {"id":6,"path":"/admin/content/clientManage","name":"clientManage","nameZh":"客户信息","iconCls":"el-icon-user","component":"content/clientManage","parentId":3,"children":[]}
+              ]},
             ]
   }
   var fmtRoutes = formatRoutes(menus)
